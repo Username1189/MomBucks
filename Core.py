@@ -3,7 +3,6 @@ import streamlit as st
 from streamlit.script_runner import RerunException
 from streamlit.script_request_queue import RerunData
 
-import socket
 import pandas as pd
 from datetime import datetime
 
@@ -26,16 +25,20 @@ def done(mombucks, num, total, subadd, reason):
         raise RerunException(RerunData())
 
 
-def add(mombucks, nummombucks, reason):
-    st.session_state.add = True
-    mombucksadded = st.number_input("Number of Mom Bucks To Add: ", 0)
-    done(mombucks, mombucksadded, nummombucks, True, reason)
+def add(reason):
+    with open("MomBucksTraker", "r+") as mombucks:
+        nummombucks = mombucks.read()
+        st.session_state.add = True
+        mombucksadded = st.number_input("Number of Mom Bucks To Add: ", 0)
+        done(mombucks, mombucksadded, nummombucks, True, reason)
 
 
-def sub(mombucks, nummombucks, reason):
-    st.session_state.sub = True
-    mombucksadded = st.number_input("Number of Mom Bucks To Subtract: ", 0)
-    done(mombucks, -mombucksadded, nummombucks, False, reason)
+def sub(reason):
+    with open("MomBucksTraker", "r+") as mombucks:
+        nummombucks = mombucks.read()
+        st.session_state.sub = True
+        mombucksadded = st.number_input("Number of Mom Bucks To Subtract: ", 0)
+        done(mombucks, -mombucksadded, nummombucks, False, reason)
 
 
 def log():
@@ -46,19 +49,20 @@ def log():
 def run():
     if st.text_input("Password: ") != "123456": return
 
-    if st.button("Log"):
-        log()
-        if not st.button("Back"): return
-    mombucks = open("MomBucksTraker", "r+")
-    nummombucks = mombucks.read()
-    st.subheader("Sanjay has MomBucks: " + str(nummombucks))
-    st.subheader(f"Which is equal to {int(nummombucks) / 10} rupees")
+    with open("MomBucksTraker", "r+") as mombucks:
+        nummombucks = mombucks.read()
 
-    if 'sub' not in st.session_state: st.session_state.sub = False
-    if 'add' not in st.session_state: st.session_state.add = False
-    if st.button("Add") or st.session_state.add:
-        reason = st.text_input("Reason: ")
-        add(mombucks, nummombucks, reason)
-    if st.button("Subtract") or st.session_state.sub:
-        reason = st.text_input("Reason: ")
-        sub(mombucks, nummombucks, reason)
+        if st.button("Log"):
+            log()
+            if not st.button("Back"): return
+        st.subheader("Sanjay has MomBucks: " + str(nummombucks))
+        st.subheader(f"Which is equal to {int(nummombucks) / 10} rupees")
+
+        if 'sub' not in st.session_state: st.session_state.sub = False
+        if 'add' not in st.session_state: st.session_state.add = False
+        if st.button("Add") or st.session_state.add:
+            reason = st.text_input("Reason: ")
+            add(reason)
+        if st.button("Subtract") or st.session_state.sub:
+            reason = st.text_input("Reason: ")
+            sub(reason)

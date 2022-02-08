@@ -39,8 +39,7 @@ def sub(mombucks, nummombucks, reason):
 
 
 def run():
-    st.write("Your host name = "+socket.gethostname())
-    if socket.gethostname() != "pybox":
+    if st.text_input("Password: ") != "1234":
         return
     mombucks = open("MomBucksTraker", "r+")
     nummombucks = mombucks.read()

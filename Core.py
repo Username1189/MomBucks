@@ -56,10 +56,9 @@ def run():
 
     if 'sub' not in st.session_state: st.session_state.sub = False
     if 'add' not in st.session_state: st.session_state.add = False
-    if socket.gethostname() == "pybox":
-        if st.button("Add") or st.session_state.add:
-            reason = st.text_input("Reason: ")
-            add(mombucks, nummombucks, reason)
-        if st.button("Subtract") or st.session_state.sub:
-            reason = st.text_input("Reason: ")
-            sub(mombucks, nummombucks, reason)
+    if st.button("Add") or st.session_state.add:
+        reason = st.text_input("Reason: ")
+        add(mombucks, nummombucks, reason)
+    if st.button("Subtract") or st.session_state.sub:
+        reason = st.text_input("Reason: ")
+        sub(mombucks, nummombucks, reason)

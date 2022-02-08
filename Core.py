@@ -40,9 +40,12 @@ def sub(mombucks, nummombucks, reason):
 
 def log():
     st.table(pd.read_csv("Tracker.csv").to_dict())
+    st.write("Total Lines: " + str(pd.read_csv("Tracker.csv").size))
 
 
 def run():
+    if st.text_input("Password: ") != "123456": return
+
     if st.button("Log"):
         log()
         if not st.button("Back"): return
@@ -50,8 +53,6 @@ def run():
     nummombucks = mombucks.read()
     st.subheader("Sanjay has MomBucks: " + str(nummombucks))
     st.subheader(f"Which is equal to {int(nummombucks) / 10} rupees")
-    
-    if st.text_input("Password: ") != "123456": return
 
     if 'sub' not in st.session_state: st.session_state.sub = False
     if 'add' not in st.session_state: st.session_state.add = False
